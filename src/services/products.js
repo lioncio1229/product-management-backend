@@ -7,23 +7,28 @@ async function addProduct(payload)
     return result.insertedId;
 }
 
-async function getProducts()
+async function getProducts(username)
 {
-    const cursor = getProductCollection().find();
+    const cursor = getProductCollection().find({username});
     const products = [];
-    await cursor.forEach(product => products.push(product));
+    await cursor.forEach(p => products.push({
+        id: p._id,
+        name: p.name,
+        price: p.price,
+        creationDate: p.creationDate,
+    }));
     return products;
 }
 
-async function getProduct(productId)
+async function getProduct(username, productId)
 {
-    return await getProductCollection().findOne({_id: new ObjectId(productId)});
+    return await getProductCollection().findOne({username, _id: new ObjectId(productId)});
 }
 
-async function updateProduct(productId, payload)
+async function updateProduct(username, productId, payload)
 {
     const result = await getProductCollection().updateOne(
-        { _id: new ObjectId(productId) },
+        { username, _id: new ObjectId(productId) },
         {
             $set: { ...payload },
         },
@@ -34,9 +39,9 @@ async function updateProduct(productId, payload)
     return result.matchedCount === 1;
 }
 
-async function deleteProduct(productId)
+async function deleteProduct(username, productId)
 {
-    const result = await getProductCollection().deleteOne({_id: new ObjectId(productId)});
+    const result = await getProductCollection().deleteOne({username, _id: new ObjectId(productId)});
     return result.deletedCount === 1;
 }
 
