@@ -32,8 +32,8 @@ async function getProduct(req, res){
 async function addProduct(req, res){
     try{
         const {name, price} = req.body;
-        const creationDate = Date.now();
-        const {insertedId} = await p.addProduct({username: req.username, name, price, creationDate});
+        const creationDate = new Date().toLocaleDateString()
+        const insertedId = await p.addProduct({username: req.username, name, price, creationDate});
         res.send({
             id: insertedId,
             name,
