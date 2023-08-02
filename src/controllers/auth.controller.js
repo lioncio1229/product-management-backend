@@ -49,7 +49,6 @@ async function auth(req, res){
             if(user)
             {
                 const decryptedPassword = decrypt(user.password);
-                console.log('pw: ', [password, decryptedPassword])
                 if(password === decryptedPassword)
                     token = generateAccessToken(user);
             }

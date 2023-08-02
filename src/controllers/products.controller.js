@@ -1,7 +1,6 @@
 const p = require('../services/products');
 
 
-
 async function getProducts(req, res){
     try{
         const o = await p.getProducts(req.username);
