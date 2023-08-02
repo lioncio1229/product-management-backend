@@ -9,8 +9,7 @@ async function auth(req, res){
         
         if(type === 'signup')
         {
-            const {fullname} = req.body;
-            const token = generateAccessToken({fullname, username, password});
+            const token = generateAccessToken({username, password});
             const exist = await isUserExist(username);
 
             if(exist)
@@ -19,7 +18,7 @@ async function auth(req, res){
                 return;
             }
 
-            await addUser({username, fullname, password: encrypt(password)});
+            await addUser({username, password: encrypt(password)});
             req.session.accessToken = token
             res.send({});
         }
