@@ -69,6 +69,17 @@ async function auth(req, res){
     }
 }
 
+async function authenticated(req, res){
+    try{
+        res.send('Authenticated');
+    }
+    catch(e)
+    {
+        res.status(500).send(e);
+    }
+}
+
 module.exports = {
     auth,
+    authenticated,
 }
