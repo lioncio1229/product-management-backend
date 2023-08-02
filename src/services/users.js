@@ -1,15 +1,15 @@
-const { getUserCollections } = require("./collections.js");
+const { getUserCollection } = require("./collections.js");
 
 
 async function addUser(payload)
 {
-    const result = await getUserCollections().insertOne({...payload});
+    const result = await getUserCollection().insertOne({...payload});
     return result?.insertedId;
 }
 
 async function getUsers()
 {
-    const cursor = getUserCollections().find();
+    const cursor = getUserCollection().find();
     const users = [];
     await cursor.forEach(user => users.push(user));
     return users;
@@ -23,12 +23,12 @@ async function isUserExist(username)
 
 async function getUser(username)
 {
-    return await getUserCollections().findOne({username});
+    return await getUserCollection().findOne({username});
 }
 
 async function updateUser(username, payload)
 {
-    const result = await getUserCollections().updateOne(
+    const result = await getUserCollection().updateOne(
       { username },
       {
         $set: {...payload},
@@ -39,7 +39,7 @@ async function updateUser(username, payload)
 
 async function deleteUser(username)
 {
-    const result = await getUserCollections().deleteOne({username});
+    const result = await getUserCollection().deleteOne({username});
     return result?.deletedCount === 1;
 }
 

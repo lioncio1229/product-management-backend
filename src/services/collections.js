@@ -13,12 +13,18 @@ function getCollectionAtDatabase(collectionName)
     }
 }
 
-function getUserCollections()
+function getUserCollection()
 {
     return getCollectionAtDatabase('users');
 }
 
+function getProductCollection()
+{
+    return getCollectionAtDatabase('products');
+}
+
 module.exports = {
     getCollectionAtDatabase,
-    getUserCollections,
+    getUserCollection,
+    getProductCollection,
 }

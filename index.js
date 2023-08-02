@@ -1,9 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const sessions = require('express-session');
-const authRouter = require('./src/routes/auth.route');
 const { connect } = require('./src/services/connection');
 require('dotenv').config();
+
+const authRouter = require('./src/routes/auth.route');
+const productsRouter = require('./src/routes/products.route');
+
 const {env} = process;
 
 const app = express();
@@ -43,6 +46,7 @@ app.get('/', function (req, res) {
 });
 
 app.use('/auth', authRouter);
+app.use('/products', productsRouter);
 
 connect();
 
