@@ -71,7 +71,7 @@ async function auth(req, res){
 
 async function authenticated(req, res){
     try{
-        res.send('Authenticated');
+        res.send({username: req.username});
     }
     catch(e)
     {
