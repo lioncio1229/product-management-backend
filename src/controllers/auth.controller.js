@@ -1,6 +1,7 @@
 const { generateAccessToken, isAccessTokenValid } = require('../utils/accessToken');
 const {addUser, getUser, isUserExist} = require('../services/users');
 const {encrypt, decrypt} = require('../utils/encryption');
+const {CustomError, sendErrorResponse} = require('../utils/CustomError');
 
 async function auth(req, res){
     try{
@@ -14,8 +15,7 @@ async function auth(req, res){
 
             if(exist)
             {
-                res.status(403).send('Username already exist');
-                return;
+                throw new CustomError('Username already exist', 403);
             }
 
             await addUser({username, password: encrypt(password)});
@@ -25,13 +25,8 @@ async function auth(req, res){
 
         else if(type === 'signout')
         {
-            if(!isAccessTokenValid(req.session.accessToken))
-            {
-                res.status(200).send('Already Signout');
-                return;
-            }
             req.session.accessToken = null;
-            res.status(200).send('Signout');
+            res.status(200).send({});
         }
 
         else if(type === 'signin')
@@ -50,6 +45,9 @@ async function auth(req, res){
                 const decryptedPassword = decrypt(user.password);
                 if(password === decryptedPassword)
                     token = generateAccessToken(user);
+                else{
+                    throw new CustomError('Invalid Credentials', 401);
+                }
             }
             
             if(token)
@@ -59,13 +57,13 @@ async function auth(req, res){
             }
             else
             {
-                res.status(401).send('Please Signup');
+                throw new CustomError('Please Signup', 401);
             }
         }
     }
     catch(e)
     {
-        res.status(500).send(e);
+        sendErrorResponse(res, e);
     }
 }
 
